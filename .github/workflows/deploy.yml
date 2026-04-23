@@ -14,16 +14,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Debug File Structure
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Listing all files:"
+          ls -R
+
       - name: Install JupyterLite
         run: |
           pip install jupyterlite-core jupyterlite-pyodide-kernel
+
       - name: Build JupyterLite
         run: |
-          jupyter lite build --contents content
+          # Ensure content exists even if the push was wonky
+          mkdir -p content
+          jupyter lite build --contents content --output-dir _output
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
