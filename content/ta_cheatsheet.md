@@ -1,8 +1,11 @@
 # TA Cheatsheet
 
-A guide for TAs walking the room during the workshop. Each section maps to one task in `notebook.ipynb`.
+A guide for TAs walking the room during the workshop. The file has two halves:
 
-**Important:** every team is working on a different `secret_dataset_<n>.csv`, so column names and value ranges will vary. The "Answer" code below uses placeholder names like `"some_column"` — students will need to substitute real column names from their own dataset.
+- **Per-task guidance** (below) — for each of the 9 tasks: the answer code, common pitfalls, and Socratic hints. Use this when a team is stuck on *what to do*.
+- **Datasets** (further down) — one entry per `secret_dataset_<n>.csv` with suggested column choices and dataset-specific quirks. Use this when a team is stuck on *what their data is*.
+
+**Important:** every team is working on a different `secret_dataset_<n>.csv`, so column names and value ranges will vary. The "Answer" code below uses placeholder names like `"some_column"` — students will need to substitute real column names from their own dataset (the per-dataset section suggests good picks).
 
 When a team gets stuck, prefer the questions under "Hints to give" before showing them the code under "Answer".
 
@@ -98,7 +101,29 @@ df.describe()
 
 ---
 
-## Task 5 — Sort and filter
+## Task 5 — Count categories
+
+### Answer
+
+```python
+df["some_categorical_column"].value_counts()
+```
+
+### Common pitfalls
+
+- Picking a numeric column with hundreds of unique values — output is unreadable. Steer them to a column with a small number of distinct values (e.g. gender, region, yes/no fields).
+- Calling `value_counts()` on the whole DataFrame instead of one column — `df.value_counts()` works in modern pandas but produces a multi-row index that confuses beginners.
+- Treating the output as a DataFrame — it's a Series, indexed by the unique values.
+
+### Hints to give
+
+- "Which of your columns hold *labels* rather than numbers? Pick one of those."
+- "How would you count how often each unique value appears? Look at the cheatsheet under 'Inspecting'."
+- "Out of the values that came back, which is most common? Which is rare?"
+
+---
+
+## Task 6 — Sort and filter
 
 ### Answer
 
@@ -125,7 +150,56 @@ df[df["some_column"] > df["some_column"].mean()]
 
 ---
 
-## Task 6 — Plot
+## Task 7 — Derive a new column
+
+### Answer
+
+```python
+# Example shapes:
+df["total"] = df["a"] + df["b"]
+df["diff"]  = df["a"] - df["b"]
+df["ratio"] = df["a"] / df["b"]
+```
+
+### Common pitfalls
+
+- Trying to add or divide text columns — pandas concatenates strings or raises a `TypeError`. The columns being combined must be numeric (or both text for concat).
+- Forgetting the assignment back to a column: writing `df["a"] + df["b"]` alone produces a Series but doesn't store it.
+- Naming the new column the same as an existing column and silently overwriting it.
+- Dividing by a column that contains zeros — they get `inf` or `NaN` in some rows.
+
+### Hints to give
+
+- "What's a question about your data that needs a column you don't have yet?"
+- "Which two columns could you combine — by adding, subtracting, or dividing — to answer that question?"
+- "Once you've created the new column, how do you check it actually appeared in `df`?"
+
+---
+
+## Task 8 — Group and average
+
+### Answer
+
+```python
+df.groupby("some_categorical_column")["some_numeric_column"].mean()
+```
+
+### Common pitfalls
+
+- Swapping the categorical and numeric columns — `df.groupby("num")["cat"].mean()` raises `TypeError` because you can't average text.
+- Picking a categorical column with hundreds of unique values — the output is one row per category, so it's unreadable.
+- Forgetting to look at *both* the highest and lowest groups in the result.
+- Using `.mean()` on a column that's mostly NaN — the means are fine, but the team may not realize how few rows back each group.
+
+### Hints to give
+
+- "Which column would you use to split your data into groups? It should be a category column with not too many distinct values."
+- "Which numeric column would you average inside each group?"
+- "Which group came out on top? Was that surprising? What about the lowest one?"
+
+---
+
+## Task 9 — Plot
 
 ### Answer
 
