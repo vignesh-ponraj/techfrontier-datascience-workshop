@@ -26,6 +26,7 @@ A quick reference for the functions you'll need in the workshop notebook. Each l
 - `df["new_col"] = df["a"] + df["b"]` — create a new column that's the sum of two existing columns.
 - `df["new_col"] = df["a"] - df["b"]` — create a new column that's a difference.
 - `df["new_col"] = df["a"] / df["b"]` — create a new column that's a ratio.
+- `df["new_col"] = df["a"] > value` — create a True/False column you can use as a category for value_counts or groupby.
 
 ## Analyzing
 
@@ -34,6 +35,7 @@ A quick reference for the functions you'll need in the workshop notebook. Each l
 - `df[df["col_name"] > value]` — keep only the rows where `col_name` is greater than `value`.
 - `df["col_name"].mean()` — average of a single column.
 - `df.groupby("cat_col")["num_col"].mean()` — average of `num_col` for each category in `cat_col`.
+- `df.groupby("cat_col").size()` — count how many rows are in each category (alternative to `.mean()` when there's no useful numeric column).
 
 ## Plotting
 
