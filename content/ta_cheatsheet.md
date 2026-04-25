@@ -297,7 +297,7 @@ One entry per `secret_dataset_<n>.csv`. Use these to anticipate where a specific
 
 **Suggested columns:**
 - numeric: `total`, `male_share`, `female_share`, `gap`.
-- categorical: `name` is technically categorical but each is unique; tell them this dataset has no good column for `value_counts` and they'll get most insight from sort/filter and plot.
+- categorical: `name` is unique-per-row, so this team needs to derive a category. Show them the boolean-derive recipe: `df["male_dominant"] = df["male_share"] > df["female_share"]`. Use the new column for value_counts and groupby.
 - plot: `name` (X) vs `total` (Y) — but only after sorting and `head(15)`.
 - derived column: `df["dominant"] = df["male_share"] - df["female_share"]` — a signed gap that sorts in a meaningful direction.
 
@@ -352,7 +352,7 @@ One entry per `secret_dataset_<n>.csv`. Use these to anticipate where a specific
 
 **Suggested columns:**
 - numeric: `beer_servings`, `spirit_servings`, `wine_servings`, `total_litres_of_pure_alcohol`.
-- categorical: `country` is unique-per-row.
+- categorical: `country` is unique-per-row, so this team needs to derive a category. Show them the boolean-derive recipe: `df["heavy_drinker"] = df["total_litres_of_pure_alcohol"] > df["total_litres_of_pure_alcohol"].median()`. Use the new column for value_counts and groupby.
 - plot: `country` (X) vs `total_litres_of_pure_alcohol` (Y) after `head(15)`.
 - derived column: `df["beer_share"] = df["beer_servings"] / (df["beer_servings"] + df["spirit_servings"] + df["wine_servings"])`.
 
