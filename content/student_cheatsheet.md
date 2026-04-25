@@ -13,6 +13,7 @@ A quick reference for the functions you'll need in the workshop notebook. Each l
 - `df.columns` — list the column names.
 - `df.shape` — tuple of `(number_of_rows, number_of_columns)`.
 - `df.dtypes` — show the data type of each column.
+- `df["col_name"].value_counts()` — count how many times each unique value appears in a column.
 
 ## Cleaning
 
@@ -20,12 +21,19 @@ A quick reference for the functions you'll need in the workshop notebook. Each l
 - `df.fillna(value)` — replace missing values with `value` (e.g. `0`, a number, or `df["col"].mean()`).
 - `df.dropna()` — drop any row that has at least one missing value.
 
+## Building
+
+- `df["new_col"] = df["a"] + df["b"]` — create a new column that's the sum of two existing columns.
+- `df["new_col"] = df["a"] - df["b"]` — create a new column that's a difference.
+- `df["new_col"] = df["a"] / df["b"]` — create a new column that's a ratio.
+
 ## Analyzing
 
 - `df.describe()` — table of count, mean, std, min, quartiles, and max for every numeric column.
 - `df.sort_values(by="col_name", ascending=False)` — sort the DataFrame by a column, highest first.
 - `df[df["col_name"] > value]` — keep only the rows where `col_name` is greater than `value`.
 - `df["col_name"].mean()` — average of a single column.
+- `df.groupby("cat_col")["num_col"].mean()` — average of `num_col` for each category in `cat_col`.
 
 ## Plotting
 
