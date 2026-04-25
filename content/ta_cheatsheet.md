@@ -480,15 +480,15 @@ One entry per `secret_dataset_<n>.csv`. Use these to anticipate where a specific
 
 **Shape:** 242 rows × 18 columns.
 
-**Suggested columns:**
+**Quirks (read first):**
+- **Several column names in the raw CSV have leading or trailing whitespace** (e.g. `" Total Fat (g)"`, `"Trans Fat (g) "`). Before anything else, have the team run `df.columns = df.columns.str.strip()` to normalize them. After that, the column names below work as written.
+- Some "numeric" columns are sneaky strings — e.g. `Caffeine (mg)` contains `"Varies"` for some rows. Suggest `pd.to_numeric(df["Caffeine (mg)"], errors="coerce")` if they want to use that column.
+
+**Suggested columns** (assuming whitespace was stripped per the quirk above):
 - numeric: `Calories`, `Total Fat (g)`, `Sodium (mg)`, `Total Carbohydrates (g)`, `Sugars (g)`, `Protein (g)`, `Vitamin A (% DV)` — most of the nutrient columns.
 - categorical: `Beverage_category`, `Beverage_prep` (size/preparation type — small cardinality).
 - plot: `Beverage_category` (X) vs average `Calories` (Y), via `groupby`.
 - derived column: `df["sugar_per_calorie"] = df["Sugars (g)"] / df["Calories"]` — proportion of calories from sugar.
-
-**Quirks:**
-- **Several column names contain leading or trailing whitespace** (e.g. `" Total Fat (g)"`, `"Trans Fat (g) "` with a trailing space). Students will get `KeyError` unless they copy-paste exact strings from `df.columns`. Strongly suggest they print `df.columns.tolist()` first and copy values verbatim.
-- Some "numeric" columns are sneaky strings — e.g. `Caffeine (mg)` contains `"Varies"` for some rows. Suggest `pd.to_numeric(df["Caffeine (mg)"], errors="coerce")` if they want to use that column.
 
 ---
 
