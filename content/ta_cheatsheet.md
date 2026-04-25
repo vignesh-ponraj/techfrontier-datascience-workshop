@@ -258,7 +258,7 @@ One entry per `secret_dataset_<n>.csv`. Use these to anticipate where a specific
 **Shape:** ~1186 rows × 16 columns.
 
 **Suggested columns:**
-- numeric: any of the six `rank_ep<N>_<title>` columns (values 1–6).
+- numeric: any of the six rank columns (values 1–6): `rank_ep1_phantom_menace`, `rank_ep2_clones`, `rank_ep3_sith`, `rank_ep4_new_hope`, `rank_ep5_empire`, `rank_ep6_jedi`.
 - categorical: `gender`, `education`, `region`, `is_fan_starwars`, `shot_first` — all small-cardinality.
 - plot: `region` (X) vs the average rank of one episode (Y) — works well as a barplot of `groupby` output.
 - derived column: `df["avg_prequel_rank"] = (df["rank_ep1_phantom_menace"] + df["rank_ep2_clones"] + df["rank_ep3_sith"]) / 3`.
@@ -283,9 +283,9 @@ One entry per `secret_dataset_<n>.csv`. Use these to anticipate where a specific
 - derived column: tricky on this dataset — accept any reasonable string concat (e.g. combining region + age into a single label) or a recode (e.g. `df["adult"] = df["Age"] != "18 - 29"`).
 
 **Quirks:**
+- This dataset's productive path is `value_counts` (Task 5) and `groupby ... .size()` (Task 8 as a count of respondents per group). For Task 8 specifically, the canonical shape is `df.groupby("US Region").size()` or `df.groupby("What is typically the main dish...").size()` — `.mean()` won't work because there's only one numeric column and it's not meaningful to average. Frame `.size()` as the *intended* solution for this dataset, not a fallback.
 - Survey data with skip-logic — many columns are 50%+ missing. Don't try to `dropna()` over all columns, the DataFrame will go to zero rows. Recommend dropping NaN only for the specific columns being used in a step.
-- `describe()` and `sort_values` will be thin. Lean hard into `value_counts` (Task 5) and `groupby` (Task 8) — those are where this dataset shines.
-- For Task 8, suggest grouping by `US Region` and counting (e.g. `.size()` instead of `.mean()`) if the team can't find a numeric column to average. Document this as the alternative shape.
+- `describe()` and `sort_values` will be thin — that's expected, not a bug.
 
 ---
 
